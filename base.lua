@@ -355,53 +355,6 @@ SELFAQ.AddonEquipItemByName = function( item_id, slot_id )
     SELFAQ.popupInfo(link)
 end
 
-SELFAQ.findCarrot = function( id, slot_id, link )
-
-    if slot_id == 13 then
-
-        -- 优先装备碎天者之鞭
-        if id == 32863 and UnitLevel("player") >= 70 then
-            SELFAQ.carrot = id
-        -- 其次是马鞭
-        -- 如果已经有碎天者之鞭，则不更换
-        elseif id == 25653 and UnitLevel("player") >= 69 and SELFAQ.carrot < 25653 then
-            SELFAQ.carrot = id
-        -- 最后是萝卜
-        elseif id == 11122 and SELFAQ.carrot == 0 then
-            SELFAQ.carrot = id
-        end
-
-        if not tContains(SELFAQ.needSlots, 13) and SELFAQ.carrot > 0 then
-            table.insert(SELFAQ.needSlots, 13)
-        end
-
-        return
-    end
-
-    local enchantId = SELFAQ.GetEnchanitID(link)
-
-    -- 找到带有秘银马刺的鞋子，保存起来
-    if enchantId == "464" or enchantId == "930" then
-        SELFAQ["ride"..slot_id] = id
-    end
-
-    if not tContains(SELFAQ.needSlots, slot_id) and SELFAQ["ride"..slot_id]>0 then
-        table.insert(SELFAQ.needSlots, slot_id)
-    end
-end
-
-SELFAQ.findSwim = function( id, slot_id )
-
-    -- 找到水藤或者碧蓝腰带，保存起来
-    if id == 7052 or id == 9452 or id == 10506 then
-        SELFAQ["swim"..slot_id] = id
-    end
-
-    if not tContains(SELFAQ.needSlots, slot_id) and SELFAQ["swim"..slot_id]>0 then
-        table.insert(SELFAQ.needSlots, slot_id)
-    end
-end
-
 SELFAQ.equipByID = function(item_id, slot_id, popup)
 
     if not SELFAQ.playerCanEquip() then

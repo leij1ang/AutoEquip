@@ -1,0 +1,25 @@
+{
+  "Lua.diagnostics.globals": [
+    "STANDARD_TEXT_FONT",
+    "InterfaceOptionsFrame_OpenToCategory",
+    "EasyMenu",
+    "SlashCmdList",
+    "GameTooltip_SetDefaultAnchor",
+    "InterfaceOptions_AddCategory",
+    "UIDropDownMenu_SetButtonWidth",
+    "UIDropDownMenu_Initialize",
+    "UIDropDownMenu_SetSelectedValue",
+    "UIDropDownMenu_SetText",
+    "UIDropDownMenu_SetWidth",
+    "UIDropDownMenu_JustifyText",
+    "UIDropDownMenu_AddButton",
+    "UIDropDownMenu_CreateInfo",
+    "UIDropDownMenu_GetSelectedValue",
+    "GameTooltip_Hide",
+    "GameTooltip",
+    "NUM_BAG_SLOTS",
+    "MAX_RAID_MEMBERS",
+    "GetCursorPosition"
+  ],
+  "wowAPI.locale": "zhCN"
+}

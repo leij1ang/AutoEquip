@@ -16,7 +16,7 @@ SELFAQ.init = false
 -- 获取当前角色名字
 SELFAQ.player = UnitName("player")
 
--- if SELFAQ.player == "卡法" or SELFAQ.player == "卡卡咔" or SELFAQ.player == "水猎" or SELFAQ.player == "砍大山"  then
+-- if SELFAQ.player == "卡法"
 -- 	SELFAQ.enableDebug = true          -- 调试开关
 -- end
 

@@ -463,120 +463,6 @@ function SELFAQ.settingInit()
             height = SELFAQ.lastHeightQueue-(45 + k*35)
         end
 
-        -- naxx
-        if slot_id == 13 then
-
-            height = height - 43
-
-            do
-                local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-                t:SetText(L["NAXX / Argent Dawn Trinket:"] )
-                t:SetPoint("TOPLEFT", queueFrame, 25, height)
-            end
-
-            if SELFAQ.undeadTrinket == 0 then
-
-                do
-                    local l = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-                    l:SetText(L["<There is no suitable trinkets>"])
-                    l:SetPoint("TOPLEFT", queueFrame, 25, height - 35)
-                end
-
-                height = height - 35
-
-            else
-
-                do
-
-                    function Undead_Init(self,level)
-                        level = level or 1;
-                        if (level == 1) then
-                            for i=1,2 do
-                                
-                                local number = i
-
-                                local info = UIDropDownMenu_CreateInfo();
-                               info.text = L["Priority "]..number
-                               info.value = number
-
-                               info.func = function( frame )
-                                    current = number
-                                    UIDropDownMenu_SetSelectedValue(queueFrame.undeadDropdown, number, 0)
-                                    UIDropDownMenu_SetText(queueFrame.undeadDropdown, L["Priority "]..number) 
-
-                                    -- 更新页面中的数据
-                                    AQSV.undeadPosition = number
-                               end
-
-                               UIDropDownMenu_AddButton(info, level)
-
-                            end
-                        end
-                    end
-
-                    local dropdown = CreateFrame("Frame", nil, queueFrame, "UIDropDownMenuTemplate")
-
-                    dropdown:SetPoint("TOPLEFT", 6, height-  30)
-
-                    queueFrame.undeadDropdown = dropdown
-
-                    UIDropDownMenu_SetButtonWidth(dropdown, 70)
-                    UIDropDownMenu_Initialize(dropdown, Undead_Init)
-
-                    -- 默认显示第一套
-                    UIDropDownMenu_SetSelectedValue(dropdown, AQSV.undeadPosition, 0)
-                    UIDropDownMenu_SetText(dropdown, L["Priority "]..AQSV.undeadPosition)
-                    
-                    UIDropDownMenu_SetWidth(dropdown, 70)
-                    UIDropDownMenu_JustifyText(dropdown, "LEFT")
-
-                end
-
-                do
-                    local l = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-                    l:SetText(L["Select the position to insert "]..GetItemLink(SELFAQ.undeadTrinket))
-                    l:SetPoint("TOPLEFT", queueFrame, 120, height-  35)
-                end
-
-                -- 副本里
-                do
-                    local b = CreateFrame("CheckButton", nil, queueFrame, "UICheckButtonTemplate")
-                    b:SetPoint("TOPLEFT", queueFrame, 25, height - 65)
-                    b:SetChecked(AQSV.enableInUndeadInstance)
-
-                    b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-                    b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
-                    b.text:SetText(L["Enable in Naxxramas / Scholomance / Stratholme"])
-                    b.text1 = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-                    b.text1:SetPoint("LEFT", b, "RIGHT", 0, -20)
-                    b.text1:SetText(L["(Disable automatically when the target is not undead is NAXX)"])
-                    b:SetScript("OnClick", function()
-                        AQSV.enableInUndeadInstance = not AQSV.enableInUndeadInstance
-                        b:SetChecked(AQSV.enableInUndeadInstance)
-                    end)
-                end
-
-                -- 副本外
-                do
-                    local b = CreateFrame("CheckButton", nil, queueFrame, "UICheckButtonTemplate")
-                    b:SetPoint("TOPLEFT", queueFrame, 25, height - 110)
-                    b:SetChecked(AQSV.enableTargetUndead)
-
-                    b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-                    b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
-                    b.text:SetText(L["Enable when the target is undead out of instance"])
-                    b:SetScript("OnClick", function()
-                        AQSV.enableTargetUndead = not AQSV.enableTargetUndead
-                        b:SetChecked(AQSV.enableTargetUndead)
-                    end)
-                end
-
-                height = height - 120
-
-            end
-
-        end
-
         SELFAQ.lastHeightQueue = height - 43
 
     end
@@ -650,23 +536,6 @@ function SELFAQ.settingInit()
         f.checkbox[key] = b
     end
 
-    function buildSlotCheckbox(text, key, pos, x)
-
-        local b = CreateFrame("CheckButton", nil, f, "UICheckButtonTemplate")
-        b:SetPoint("TOPLEFT", f, x, pos)
-        b:SetChecked(AQSV.enableItemBarSlot[key])
-
-        b.text = b:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
-        b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
-        b.text:SetText(text)
-        b:SetScript("OnClick", function()
-            AQSV.enableItemBarSlot[key] = not AQSV.enableItemBarSlot[key]
-            b:SetChecked(AQSV.enableItemBarSlot[key])
-        end)
-
-        f.checkbox[key] = b
-    end
-
     function buildLine( y )
         local line = CreateFrame("Button", nil, f, "BackdropTemplate")
 
@@ -726,27 +595,6 @@ function SELFAQ.settingInit()
 
     local slotCheckbosHeight = -115-25
 
-    buildSlotCheckbox(L["MainHand"], 16, slotCheckbosHeight, 45)
-    buildSlotCheckbox(L["OffHand"], 17, slotCheckbosHeight, 155)
-    buildSlotCheckbox(L["Ranged"], 18, slotCheckbosHeight, 265)
-    buildSlotCheckbox(L["Head"], 1, slotCheckbosHeight, 375)
-    buildSlotCheckbox(L["Neck"], 2, slotCheckbosHeight, 485)
-
-    slotCheckbosHeight = -140-25
-
-    buildSlotCheckbox(L["Shoulder"], 3, slotCheckbosHeight, 45)
-    buildSlotCheckbox(L["Chest"], 5, slotCheckbosHeight, 155)
-    buildSlotCheckbox(L["Waist"], 6, slotCheckbosHeight, 265)
-    buildSlotCheckbox(L["Legs"], 7, slotCheckbosHeight, 375)
-    buildSlotCheckbox(L["Feet"], 8, slotCheckbosHeight, 485)
-
-    slotCheckbosHeight = -165-25
-
-    buildSlotCheckbox(L["Wrist"], 9, slotCheckbosHeight, 45)
-    buildSlotCheckbox(L["Hands"], 10, slotCheckbosHeight, 155)
-    buildSlotCheckbox(L["Finger "]..1, 11, slotCheckbosHeight, 265)
-    buildSlotCheckbox(L["Finger "]..2, 12, slotCheckbosHeight, 375)
-    buildSlotCheckbox(L["Back"], 15, slotCheckbosHeight, 485)
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
@@ -876,10 +724,6 @@ function SELFAQ.settingInit()
     end
 
     otherHight = otherHight-25
-
-    buildCheckbox(SELFAQ.color("FF4500", L["enable_carrot"]), "enableCarrot", otherHight)
-    buildCheckbox(SELFAQ.color("FF4500", L["enable_swim"]), "enableSwim", otherHight-25)
-
     buildLine(otherHight-60+3)
 
     buildCheckbox(L["When |cffffffffYou|r target an |cFFFF0000enemy|r, takeoff acceleration items"], "pauseAccWhenTarget", otherHight-60)

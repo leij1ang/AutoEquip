@@ -296,11 +296,8 @@ function SELFAQ.superInit()
 
                 SELFAQ.superEquipSuit(k)
                 return
-
             end
-
         end
-
     end
 
     SELFAQ.runEnterRules = function()
@@ -311,17 +308,7 @@ function SELFAQ.superInit()
 
             if v["enable"] then
             
-                -- 进入世界
-                if not inInstance and v["enableWorld"] then
-                    SELFAQ.superEquipSuit(k)
-                    return
-                end
 
-                -- 进入战场
-                if instanceType == "pvp" and v["enableBattleground"] then
-                    SELFAQ.superEquipSuit(k)
-                    return
-                end
 
                 -- 进入团本
                 if instanceType == "raid" and v["enableRaid"] then
@@ -341,84 +328,6 @@ function SELFAQ.superInit()
 
     end
 
-    SELFAQ.checkTargetRules = function(target)
-
-        local level = UnitLevel(target)
-
-        -- if level ~= -1 then
-        --     -- 不是boss
-        --     return false
-        -- end
-
-        if UnitIsFriend("player", target) or UnitIsDead(target) then
-            -- 目标友好，或者死了
-            return false
-        end
-
-        local name = GetUnitName(target)
-
-        if not name then
-            return
-        end
-
-        -- 检查换装规则
-        for k,v in pairs(SUITAQ) do
-            
-            if v["enableTarget"] then
-                    
-                    if strfind(v["bossText"], name) then
-                        -- if not tContains(matchSuit, k) then
-                            debug(name)
-                            return k
-                        -- end
-                    end
-
-            end
-
-        end
-
-        return false
-    end
-
-    SELFAQ.checkTargetMemberRules = function(target)
-
-        local level = UnitLevel(target)
-
-        -- if level ~= -1 then
-        --     -- 不是boss
-        --     return false
-        -- end
-
-        if UnitIsFriend("player", target) or UnitIsDead(target) then
-            -- 目标友好，或者死了
-            return false
-        end
-
-        local name = GetUnitName(target)
-
-        if not name then
-            return
-        end
-
-        -- 检查换装规则
-        for k,v in pairs(SUITAQ) do
-            
-            if v["enableTargetMember"] then
-                    
-                    if strfind(v["bossText"], name) then
-                        -- if not tContains(matchSuit, k) then
-                            debug(name)
-                            return k
-                        -- end
-                    end
-
-            end
-
-        end
-
-        return false
-    end
-
     SELFAQ.updatePage = function()
         
         local c = {
@@ -429,7 +338,6 @@ function SELFAQ.superInit()
             "enableWorld",
             "enableRaid",
             "enableParty",
-            "enableBattleground",
             "enableLock",
             "enableTargetMember",
         }
@@ -705,7 +613,7 @@ function SELFAQ.superInit()
     buildCheckbox(L["Enter the World / Leave Instance"], "enableWorld", leftHight-25)
     buildCheckbox(L["Enter a Raid instance"], "enableRaid", leftHight-50)
     buildCheckbox(L["Enter a Party instance"], "enableParty", leftHight-75)
-    buildCheckbox(L["Enter a Battleground"], "enableBattleground", leftHight-100)
+
 
     function DropDown_Initialize(self,level)
         level = level or 1;

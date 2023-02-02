@@ -3,19 +3,6 @@ local _, SELFAQ = ...
 local merge = SELFAQ.merge
 local initSV = SELFAQ.initSV
 
-
--- 棍子上的胡萝卜、骑乘手套、马刺鞋
-SELFAQ.carrot = 0
-SELFAQ.ride10 = 0
-SELFAQ.ride8 = 0
-
-SELFAQ.swim1 = 0
-SELFAQ.swim6 = 0
-SELFAQ.swim16 = 0
-
--- 缓存胡萝卜换下的饰品
--- SELFAQ.carrotBackup = 0
-
 -- 常见的主动饰品id和buff持续时间数据
 local buffTime = {}	
 buffTime[19339] = 20                    -- 思维加速宝石

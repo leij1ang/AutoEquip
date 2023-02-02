@@ -1,12 +1,9 @@
 local _, SELFAQ = ...
 
 local debug = SELFAQ.debug
-local clone = SELFAQ.clone
-local diff = SELFAQ.diff
 local L = SELFAQ.L
 local initSV = SELFAQ.initSV
 local loopSlots = SELFAQ.loopSlots
-local chatInfo = SELFAQ.chatInfo
 local chatInfo = SELFAQ.chatInfo
 local popupInfo = SELFAQ.popupInfo
 
@@ -92,21 +89,21 @@ SELFAQ.onMainUpdate = function(self, elapsed)
 
             SUITAQ = initSV(SUITAQ, {})
 
-            -- for i=1,9 do
-            --     SUITAQ[i] = initSV(SUITAQ[i], {})
-            -- end
 
             AQSV = initSV(AQSV, {})
+            -- 主动饰品队列
             AQSV.usableItems = initSV(AQSV.usableItems, SELFAQ.usable)
-            AQSV.usableChests = initSV(AQSV.usableChests, SELFAQ.usableChests)
+            -- 自动换装开关
             AQSV.enable = initSV(AQSV.enable, true)
-            AQSV.enableBattleground = initSV(AQSV.enableBattleground, true)
+            -- 固定饰品2
             AQSV.disableSlot14 = initSV(AQSV.disableSlot14, false)
-            AQSV.enableCarrot = initSV(AQSV.enableCarrot, true)
-            AQSV.enableSwim = initSV(AQSV.enableSwim, true)
+            -- 饰品位1
             AQSV.slot13 = initSV(AQSV.slot13, 0)
+            -- 饰品位2
             AQSV.slot14 = initSV(AQSV.slot14, 0)
+            -- 饰品1队列
             AQSV.queue13 = initSV(AQSV.queue13, {})
+            -- 饰品2队列
             AQSV.queue14 = initSV(AQSV.queue14, {})
 
             AQSV.x = initSV(AQSV.x, 200)
@@ -118,11 +115,9 @@ SELFAQ.onMainUpdate = function(self, elapsed)
 
             AQSV.raidTrinkets = initSV(AQSV.raidTrinkets, {})
             AQSV.pveTrinkets = initSV(AQSV.pveTrinkets, {})
-            AQSV.pvpTrinkets = initSV(AQSV.pvpTrinkets, {})
-            AQSV.pvpMode = initSV(AQSV.pvpMode, false)
+
             AQSV.reverseCooldownUnit = initSV(AQSV.reverseCooldownUnit, true)
 
-            AQSV.carrotBackup = initSV(AQSV.carrotBackup, 0)
             AQSV.backup8 = initSV(AQSV.backup8, 0)
             AQSV.backup10 = initSV(AQSV.backup10, 0)
             AQSV.backup1 = initSV(AQSV.backup1, 0)
@@ -285,23 +280,11 @@ SELFAQ.onMainUpdate = function(self, elapsed)
         end
 
         SELFAQ.checkAllWait()
-        SELFAQ.checkSuperSuit()
-        SELFAQ.checkSelfTarget()
 
         -- 插件整体开关，以角色为单位
         if not AQSV.enable then
             return
         end
-
-        -- 战场开关
-        if UnitInBattleground("player") and not AQSV.enableBattleground then
-            return
-        end
-
-        SELFAQ.changeSuit()
-
-        -- 整合团队目标处理
-        SELFAQ.runTargetMemberRules()
 
         -- 自动更换饰品
 
@@ -338,9 +321,6 @@ function SELFAQ.mainInit()
              InterfaceOptionsFrame_OpenToCategory(SELFAQ.top);
              InterfaceOptionsFrame_OpenToCategory(SELFAQ.top);
 
-        elseif msg == "pvp" then
-            SELFAQ. enablePvpMode()
-
         elseif msg == "takeoff" then
              for k,v in pairs(AQSV.slotStatus) do
                  SELFAQ.setLocker(k)
@@ -362,15 +342,6 @@ function SELFAQ.mainInit()
              end
              chatInfo(L["|cFF00FF00Locked|r all equipment buttons"])
              popupInfo(L["|cFF00FF00Locked|r all equipment buttons"])
-
-        elseif msg == "70" or msg == "73" or msg == "74"   then
-            -- EquipItemByName(19891, 17)
-            if SELFAQ.playerCanEquip()  then
-                SELFAQ.needSuit = tonumber(msg)
-            else
-                chatInfo(L["|cFF00FF00In combat|r"])
-            end
-
         elseif strfind(msg, "ipc") then
 
             -- items per column
@@ -488,8 +459,8 @@ function SELFAQ.mainInit()
     SELFAQ.main:RegisterEvent("UPDATE_BINDINGS")
 
     SELFAQ.main:RegisterEvent("PLAYER_REGEN_ENABLED")
-    SELFAQ.main:RegisterEvent("PLAYER_ALIVE")                       -- 未释放复活
-    SELFAQ.main:RegisterEvent("PLAYER_UNGHOST")                 -- 从鬼混复活
+    SELFAQ.main:RegisterEvent("PLAYER_ALIVE")                   -- 未释放复活
+    SELFAQ.main:RegisterEvent("PLAYER_UNGHOST")                 -- 从鬼魂复活
 
     SELFAQ.main:RegisterEvent("PLAYER_TARGET_CHANGED") 
     -- SELFAQ.main:RegisterEvent("UNIT_TARGET") 
@@ -548,15 +519,6 @@ function SELFAQ.mainInit()
 
             SELFAQ.runLeaveCombatRules()
             
-            -- 避免每次脱离战斗都触发
-            if AQSV.enableSuit and AQSV.enableAutoSuit70 and AQSV.currentSuit > 70 and SELFAQ.inInstance() then
-                SELFAQ.needSuit = 70
-            end
-
-            -- 执行一系列更换逻辑
-
-            SELFAQ.changeSuit()
-
             -- 自动更换饰品
             loopSlots(function(slot_id)
                 if slot_id == 13 then
@@ -566,128 +528,10 @@ function SELFAQ.mainInit()
                 end
             end)
         end
-
-
-        -- if event == "UNIT_TARGET" then
-        --     -- debug(arg1)
-
-        --     if not SELFAQ.playerCanEquip() then
-        --         return 
-        --     end
-
-        --     if not AQSV.enableSuit then
-        --         return
-        --     end
-
-        --     if arg1 == "player" then
-
-        --     else
-        --         SELFAQ.checkAndFireChangeSuit(arg1.."target")
-        --     end
-  
-        -- end
-
-        if event == "PLAYER_ENTERING_WORLD" then
-            
-            SELFAQ.runEnterRules()
-
-        end
-
         if event == "BAG_UPDATE" then
             SELFAQ.updateAllItems( )
         end
-
-        if event == "PLAYER_TARGET_CHANGED" then
-
-            if not SELFAQ.playerCanEquip() then
-                return 
-            end
-
-            SELFAQ.checkSelfTarget()
-
-        end
-
     end)
-end
-
-SELFAQ.checkSelfTarget = function()
-    
-    -- 自动骑乘判断
-    if AQSV.pauseAccWhenTarget then
-
-        if not UnitIsDead("target") and not UnitIsFriend("player", "target") then
-            SELFAQ.targetEnemy = true
-        else
-            SELFAQ.targetEnemy = false
-        end
-
-        if GetUnitName("target") == nil then
-            SELFAQ.targetEnemy = false
-        end
-    else
-        SELFAQ.targetEnemy = false
-    end
-
-    if AQSV.pauseAccWhenTargetFriend then
-
-        if not UnitIsDead("target") and UnitIsFriend("player", "target") then
-            SELFAQ.targetFriend = true
-        else
-            SELFAQ.targetFriend = false
-        end
-
-        if GetUnitName("target") == nil then
-            SELFAQ.targetFriend = false
-        end
-    else
-        SELFAQ.targetFriend = false
-    end
-
-    -- 目标是亡灵
-    if true then
-        if not UnitIsDead("target") and (UnitCreatureType("target") == "亡灵" or UnitCreatureType("target") == "恶魔") then
-            SELFAQ.targetUndead = true
-        else
-            SELFAQ.targetUndead = false
-        end
-
-        if GetUnitName("target") == nil then
-            SELFAQ.targetUndead = false
-        end
-    end
-
-    -- 目标不是亡灵
-    if true then
-        -- 目标活着，并且不是友善的，不是亡灵
-        if not UnitIsDead("target") and not UnitIsFriend("player", "target") and not (UnitCreatureType("target") == "亡灵" or UnitCreatureType("target") == "恶魔") then
-            SELFAQ.targetNotUndead = true
-        else
-            SELFAQ.targetNotUndead = false
-        end
-
-        if GetUnitName("target") == nil then
-            SELFAQ.targetNotUndead = false
-        end
-    end
-
-
-    -- 超级换装
-    local number = SELFAQ.checkTargetRules("target")
-
-    if number then
-        SELFAQ.superEquipSuit(number)
-    end
-
-    -- 73+套装
-    if not AQSV.enable then
-        return
-    end
-
-    if not SELFAQ.inInstance() then
-        return
-    end
-
-    SELFAQ.checkAndFireChangeSuit("target")
 end
 
 SELFAQ.main:SetScript("OnUpdate", SELFAQ.onMainUpdate)

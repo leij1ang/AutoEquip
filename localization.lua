@@ -22,8 +22,6 @@ SELFAQ.L = L
 local locale = GetLocale()
 
 L["enable_battleground"] = "Enable in Battleground / Equip \124cff0070dd\124Hitem:18854:0:0:0:0:0:0:0\124h[Insignia of the Alliance]\124h\124r \124cff0070dd\124Hitem:18854:0:0:0:0:0:0:0\124h[Insignia of the Horde]\124h\124r."
-L["enable_carrot"] = "Equip |cff1eff00[Carrot on a Stick]|r|cff0070dd[Riding Crop]|r|cff0070dd[Skybreaker Whip]|r when riding (Not in Instance). "
-L["enable_swim"] = "Equip |cff0070dd[Hydrocane]|r|cff1eff00[Azure Silk Belt]|r|cff1eff00[Deepdive Helmet]|r when swiming (Not in Instance)."
 L["Disable Slot 2"] = "Disable Trinket Slot 2 (Make the ultimate trinket permanent, such as \124cffa335ee\124Hitem:19379:0:0:0:0:0:0:0\124h[Neltharion's Tear]\124h\124r)"
 
 L[70] = color("00FF00", "General")
@@ -38,8 +36,6 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Enable"] = "启用"
 	L["Enable AutoEquip function"] = "启用自动换装功能"
 	L["Automatic switch to PVP queue in Battleground"] = "战场中自动切换到PVP队列"
-	L["enable_carrot"] = "骑乘时装备|cff0070dd[马鞭]|r或|cff0070dd[碎天者之鞭]|r或|cff1eff00[棍子上的胡萝卜]|r（战场/副本中不生效）"
-	L["enable_swim"] = "游泳时装备|cff0070dd[水藤]|r|cff1eff00[碧蓝丝质腰带]|r|cff1eff00[潜水头盔]|r（战场/副本中不生效）"
 	L["Disable Slot 2"] = "禁用饰品栏2 (让极品饰品常驻, 比如\124cffa335ee\124Hitem:19379:0:0:0:0:0:0:0\124h[灰暗的纳鲁薄片]\124h\124r)"
 	L["Equip item by priority forcibly even if the item in slot is aviilable"] = "强制按优先级装备物品，即使已装备的物品当前可用"
 	L["Item queue is displayed above the Equipment Bar"] = "物品队列在装备栏上方显示"
@@ -275,8 +271,6 @@ if locale == 'koKR' then
 	L["Enable"] = "사용"
 	L["Enable AutoEquip function"] = "자동 전환 기능 켜기"
 	L["Automatic switch to PVP queue in Battleground"] = "전장에서 PVP 대기열로 자동 전환"
-	L["enable_carrot"] = "말타기 장비|cff1eff00[당근 달린 지팡이]|r|cff1eff00[미스릴 박차]|r|cffffffff[조련술-마부]|r (인던 비적용）"
-	L["enable_swim"] = "수영 장비|cff0070dd[수력지팡이]|r|cff1eff00[감청색 비단 허리띠]|r|cff1eff00[고급 잠수용 보호모]|r（인던 비적용）"
 	L["Disable Slot 2"] = "장신구2 비활성화 (최고탬을 고정으로 사용할때, 예시>\124cffa335ee\124Hitem:19379:0:0:0:0:0:0:0\124h[넬타리온의 눈물]\124h\124r)"
 	L["Equip item by priority forcibly even if the item in slot is aviilable"] = "현재 장착 된 아이템이 있더라도 우선 순위에 따라 아이템을 장착해야합니다."
 	L["Item queue is displayed above the Equipment Bar"] = "장비 바 위에 아이템 대기열이 표시됩니다"

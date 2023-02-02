@@ -36,3 +36,5 @@ luac.out
 *.x86_64
 *.hex
 
+.vscode
+
